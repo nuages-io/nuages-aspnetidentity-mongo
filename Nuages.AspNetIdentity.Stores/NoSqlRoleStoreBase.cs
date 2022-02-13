@@ -14,6 +14,8 @@ public abstract class NoSqlRoleStoreBase<TRole, TKey> : IDisposable where TRole 
     [ExcludeFromCodeCoverage]
     public void Dispose()
     {
+        GC.SuppressFinalize(this);
+        
         _disposed = true;
     }
 

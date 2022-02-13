@@ -1,5 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
-
 namespace Nuages.AspNetIdentity.Stores.Mongo;
 
 public class MongoIdentityOptions

@@ -16,7 +16,6 @@ public abstract class NoSqlUserStoreBase<TUser, TRole, TKey, TUserLogin, TUserTo
 
     public abstract IQueryable<TUser> Users { get; }
     protected abstract IQueryable<TRole> Roles { get; }
-
     protected abstract IQueryable<TUserLogin> UsersLogins { get; }
     protected abstract IQueryable<TUserToken> UsersTokens { get; }
     protected abstract IQueryable<TUserRole> UsersRoles { get; }
@@ -24,6 +23,8 @@ public abstract class NoSqlUserStoreBase<TUser, TRole, TKey, TUserLogin, TUserTo
     [ExcludeFromCodeCoverage]
     public void Dispose()
     {
+        GC.SuppressFinalize(this);
+        
         _disposed = true;
     }
 
@@ -514,8 +515,7 @@ public abstract class NoSqlUserStoreBase<TUser, TRole, TKey, TUserLogin, TUserTo
         var identityRole = new TUserRole
         {
             UserId = user.Id,
-            RoleId = role.Id, 
-            
+            RoleId = role.Id
         };
 
         await AddUserRoleAsync(identityRole);
