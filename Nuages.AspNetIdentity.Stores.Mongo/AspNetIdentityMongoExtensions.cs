@@ -12,6 +12,8 @@ public static class AspNetIdentityMongoExtensions
     {
         builder.Services.Configure(configure);
 
+        ModelMapper.MapModel<TKey>();
+        
         builder.AddUserStore<MongoUserStore<TUser, TRole, TKey>>();
         builder.AddRoleStore<MongoRoleStore<TRole, TKey>>();
 

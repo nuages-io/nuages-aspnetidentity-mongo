@@ -6,8 +6,31 @@
         <Nullable>enable</Nullable>
         <OutputType>Library</OutputType>
         <IsPackable>true</IsPackable>
+
+        <Title>Nuages.AspNetIdentity.Store.Mongo</Title>
+        <Authors>Nuages.io</Authors>
+        <Description>Mongo storage Support for AspNetIdentity stores</Description>
+        <PackageLicenseFile>LICENSE</PackageLicenseFile>
+        <PackageIcon>nuages.png</PackageIcon>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <RepositoryUrl>https://github.com/nuages-io/nuages-aspnetidentity-mongo</RepositoryUrl>
+        <RepositoryType>GitHub</RepositoryType>
     </PropertyGroup>
 
+    <ItemGroup>
+        <None Include="README.md" Pack="true" PackagePath="\" />
+
+        <None Include="../LICENSE">
+            <Pack>true</Pack>
+            <PackagePath>/</PackagePath>
+        </None>
+        <None Include="../nuages.png">
+            <Pack>true</Pack>
+            <PackagePath>/</PackagePath>
+        </None>
+
+    </ItemGroup>
+    
     <ItemGroup>
         <PackageReference Include="MongoDB.Driver" Version="2.14.1" />
     </ItemGroup>

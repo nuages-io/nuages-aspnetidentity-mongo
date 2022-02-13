@@ -34,8 +34,6 @@ public class TestsUsersStore
             Locale = "en"
         };
         
-        ModelMapper.MapModel<string>();
-        
         var serviceCollection = new ServiceCollection();
 
         serviceCollection.AddSingleton<IConfiguration>(configuration);
