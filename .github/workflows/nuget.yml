@@ -39,6 +39,6 @@ jobs:
     - name: Pack
       run: |
         dotnet pack Nuages.AspNetIdentity.Stores/Nuages.AspNetIdentity.Stores.csproj --output ./nupkgs -p:PackageVersion=${VERSION} -c RELEASE
-        dotnet pack Nuages.AspNetIdentity.Stores.Mongo/AspNetIdentity.Stores.Mongo.csproj --output ./nupkgs -p:PackageVersion=${VERSION} -c RELEASE
+        dotnet pack Nuages.AspNetIdentity.Stores.Mongo/Nuages.AspNetIdentity.Stores.Mongo.csproj --output ./nupkgs -p:PackageVersion=${VERSION} -c RELEASE
     - name: Push
       run: dotnet nuget push ./nupkgs/*.nupkg -k ${{ secrets.NUGETKEY }} -s nuget.org
