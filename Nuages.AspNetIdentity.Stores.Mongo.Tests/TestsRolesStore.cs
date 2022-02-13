@@ -55,10 +55,7 @@ public class TestsRolesStore
             await service!.StartAsync(CancellationToken.None);
         });
 
-        
-
         _roleStore = new MongoRoleStore<IdentityRole<string>, string>(Options.Create(options));
-      
     }
 
     [Fact]
