@@ -48,7 +48,8 @@ public class MongoRoleStore<TRole, TKey> : NoSqlRoleStoreBase<TRole, TKey>,
         cancellationToken.ThrowIfCancellationRequested();
         ThrowIfDisposed();
 
-        role.Id = ConvertIdFromString(ObjectId.GenerateNewId().ToString());
+        if (role.Id == null || Equals(role.Id, default(TKey)))
+            role.Id = ConvertIdFromString(Guid.NewGuid().ToString());
 
         await SetNormalizedRoleNameAsync(role, role.Name.ToUpper(), cancellationToken);
 

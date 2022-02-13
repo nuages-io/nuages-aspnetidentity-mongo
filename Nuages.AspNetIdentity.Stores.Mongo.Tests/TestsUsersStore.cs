@@ -287,21 +287,21 @@ public class TestsUsersStore
         Assert.Equal(1, users.Count);
 
         var claim2 = new Claim("claim2", "value2");
-
+        
         await _userStore.ReplaceClaimAsync(user, claim, claim2, CancellationToken.None);
-
+        
         users = await _userStore.GetUsersForClaimAsync(claim, CancellationToken.None);
-
+        
         Assert.Equal(0, users.Count);
-
+        
         users = await _userStore.GetUsersForClaimAsync(claim2, CancellationToken.None);
-
+        
         Assert.Equal(1, users.Count);
-
+        
         await _userStore.RemoveClaimsAsync(user, new[] { claim2 }, CancellationToken.None);
-
+        
         user = await ReloadAsync(user);
-
+        
         claims = await _userStore.GetClaimsAsync(user, CancellationToken.None);
         Assert.Equal(0, claims.Count);
     }
@@ -366,9 +366,9 @@ public class TestsUsersStore
         Assert.Null(await _userStore.FindByLoginAsync("provider", "bad_key", CancellationToken.None));
 
         await _userStore.RemoveLoginAsync(user, "provider", "key", CancellationToken.None);
-
+        
         user = await ReloadAsync(user);
-
+        
         logins = await _userStore.GetLoginsAsync(user, CancellationToken.None);
         Assert.Equal(0, logins.Count);
     }

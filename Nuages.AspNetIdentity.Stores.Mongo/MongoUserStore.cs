@@ -78,7 +78,9 @@ public class MongoUserStore<TUser, TRole, TKey> : NoSqlUserStoreBase<TUser, TRol
         cancellationToken.ThrowIfCancellationRequested();
         ThrowIfDisposed();
 
-        user.Id = StringToKey(ObjectId.GenerateNewId().ToString());
+                
+        if (user.Id == null || Equals(user.Id, default(TKey)))
+           user.Id = StringToKey(Guid.NewGuid().ToString());
 
         var email = await GetEmailAsync(user, cancellationToken);
         await SetNormalizedEmailAsync(user, email.ToUpper(), cancellationToken);
@@ -142,7 +144,7 @@ public class MongoUserStore<TUser, TRole, TKey> : NoSqlUserStoreBase<TUser, TRol
 
         var list = claims.Select(claim => new MongoIdentityUserClaim<TKey>
         {
-            Id = ObjectId.GenerateNewId().ToString(),
+            Id = Guid.NewGuid().ToString(),
             UserId = user.Id,
             Type = claim.Type,
             Value = claim.Value
@@ -199,7 +201,7 @@ public class MongoUserStore<TUser, TRole, TKey> : NoSqlUserStoreBase<TUser, TRol
 
         var login = new MongoIdentityUserLogin<TKey>
         {
-            Id = ObjectId.GenerateNewId().ToString(),
+            Id = Guid.NewGuid().ToString(),
             UserId = user.Id,
             ProviderKey = loginInfo.ProviderKey,
             LoginProvider = loginInfo.LoginProvider,
@@ -238,7 +240,7 @@ public class MongoUserStore<TUser, TRole, TKey> : NoSqlUserStoreBase<TUser, TRol
 
     protected override async Task AddUserTokenAsync(MongoIdentityUserToken<TKey> token)
     {
-        token.Id = ObjectId.GenerateNewId().ToString();
+        token.Id = Guid.NewGuid().ToString();
         await UsersTokensCollection.InsertOneAsync(token);
     }
 
@@ -259,7 +261,7 @@ public class MongoUserStore<TUser, TRole, TKey> : NoSqlUserStoreBase<TUser, TRol
 
     protected override async Task AddUserRoleAsync(MongoIdentityUserRole<TKey> role)
     {
-        role.Id = ObjectId.GenerateNewId().ToString();
+        role.Id = Guid.NewGuid().ToString();
         await UsersRolesCollection.InsertOneAsync(role);
     }
 
