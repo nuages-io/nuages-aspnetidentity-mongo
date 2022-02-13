@@ -3,18 +3,26 @@ using Microsoft.EntityFrameworkCore;
 using Nuages.AspNetIdentity.Stores.Mongo;
 using WebAspNetIdentityWithMongo.Data;
 
+
 var builder = WebApplication.CreateBuilder(args);
+builder.Host.ConfigureAppConfiguration((hostingContext, config) =>
+{
+    config.AddJsonFile("appsettings.local.json",
+        optional: false,
+        reloadOnChange: true);
+});
 
 var useMongo = true;
 
 if (useMongo)
 {
+    
     builder.Services.
         AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
         .AddMongoStores<IdentityUser, IdentityRole, string>(config =>
         {
-            config.ConnectionString = "mongodb+srv://nuages:wCFwlSoX4qK200E1@nuages-dev-2.qxak3.mongodb.net/nuages_identity?retryWrites=true&w=majority";
-            config.Database = "nuages_identity_sample";
+            // config.ConnectionString = "";
+            // config.Database = "";
         });
 }
 else
