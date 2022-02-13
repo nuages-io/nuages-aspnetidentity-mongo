@@ -29,6 +29,7 @@ public class TestsRolesStore
             Locale = "en"
         };
         
+        
         ModelMapper.MapModel<string>();
         
         var serviceCollection = new ServiceCollection();
