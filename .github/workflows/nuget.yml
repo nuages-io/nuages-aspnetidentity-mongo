@@ -13,7 +13,9 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-
+    env:
+      ConnectionString: ${{ secrets.CONNECTIONSTRING }}
+      Database: "nuages_identity_tests"
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET

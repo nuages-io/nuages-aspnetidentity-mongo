@@ -27,4 +27,10 @@
     <ItemGroup>
         <ProjectReference Include="..\Nuages.AspNetIdentity.Stores.Mongo\Nuages.AspNetIdentity.Stores.Mongo.csproj" />
     </ItemGroup>
+
+    <ItemGroup>
+        <Content Include="appsettings.local.json" Condition="Exists('appsettings.local.json')">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
 </Project>

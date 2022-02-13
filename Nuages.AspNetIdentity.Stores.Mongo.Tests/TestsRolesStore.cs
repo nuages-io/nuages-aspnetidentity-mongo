@@ -18,7 +18,8 @@ public class TestsRolesStore
     {
         var configuration = new ConfigurationBuilder()
             .SetBasePath(Directory.GetParent(AppContext.BaseDirectory)?.FullName)
-            .AddJsonFile("appsettings.local.json", false)
+            .AddJsonFile("appsettings.local.json", true)
+            .AddEnvironmentVariables()
             .Build();
         
         var options = new MongoIdentityOptions
