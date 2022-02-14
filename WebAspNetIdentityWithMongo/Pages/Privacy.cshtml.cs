@@ -1,5 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+// ReSharper disable NotAccessedField.Local
+// ReSharper disable UnusedMember.Global
 
 namespace WebAspNetIdentityWithMongo.Pages;
 

@@ -6,13 +6,15 @@ using WebAspNetIdentityWithMongo.Data;
 
 
 var builder = WebApplication.CreateBuilder(args);
+// ReSharper disable once UnusedParameter.Local
 builder.Host.ConfigureAppConfiguration((hostingContext, config) =>
 {
     config.AddJsonFile("appsettings.local.json",
-        optional: false,
-        reloadOnChange: true);
+        false,
+        true);
 });
 
+// ReSharper disable once ConvertToConstant.Local
 var useMongo = true;
 
 if (useMongo)

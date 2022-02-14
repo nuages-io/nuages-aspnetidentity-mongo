@@ -18,6 +18,8 @@ public static class AspNetIdentityMongoExtensions
         AddStores(builder.Services, typeof(TUser), typeof(TRole));
         
         builder.Services.AddHostedService<MongoSchemaInitializer<TUser, TRole, TKey>>();
+        
+       // builder.Services.TryAddSingleton(((IHostedService) Activator.CreateInstance(typeof(MongoSchemaInitializer<,,>).MakeGenericType(typeof(TUser), typeof(TRole), typeof(TKey)))!)!);
     }
     
     // public static void AddMongoStores(this IdentityBuilder builder,
@@ -28,16 +30,11 @@ public static class AspNetIdentityMongoExtensions
     //     var keyType = FindGenericBaseType( builder.UserType, typeof(IdentityUser<>))!.GenericTypeArguments[0]; 
     //
     //     var t = typeof(ModelMapper<>).MakeGenericType(keyType);
-    //     
     //     t.GetMethod("MapModel")!.Invoke(null, new object[]{});
-    //     
-    //    // ModelMapper.MapModel<TKey>();
-    //     
+    //
     //     AddStores(builder.Services, typeof(IdentityUser), typeof(IdentityRole));
-    //     
-    //     var initializer = typeof(MongoSchemaInitializer<,,>).MakeGenericType(builder.UserType, builder.RoleType, keyType);
-    //     
-    //     builder.Services.AddHostedService<MongoSchemaInitializer<TUser, TRole, TKey>>();
+    //
+    //     builder.Services.TryAddSingleton( typeof(MongoSchemaInitializer<,,>).MakeGenericType(builder.UserType, builder.RoleType, keyType));
     // }
     
     private static void AddStores(IServiceCollection services, Type userType, Type? roleType)

@@ -4,12 +4,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using Xunit;
 
 namespace Nuages.AspNetIdentity.Stores.Mongo.Tests;
 
 [Collection("Mongo")]
+
 public class TestsRolesStore
 {
     private readonly MongoRoleStore<IdentityRole<string>, string> _roleStore;
@@ -33,8 +35,8 @@ public class TestsRolesStore
 
         serviceCollection.AddSingleton<IConfiguration>(configuration);
 
-        var identityBuilder = new IdentityBuilder(typeof(IdentityUser<string>), typeof(IdentityRole<string>), serviceCollection);
-        identityBuilder.AddMongoStores<IdentityUser<string>, IdentityRole<string>, string>(configure =>
+        var identityBuilder = new IdentityBuilder(typeof(IdentityUser<ObjectId>), typeof(IdentityRole<ObjectId>), serviceCollection);
+        identityBuilder.AddMongoStores<IdentityUser<ObjectId>, IdentityRole<ObjectId>, ObjectId>(configure =>
         {
             configure.ConnectionString = options.ConnectionString;
             configure.Database = options.Database;

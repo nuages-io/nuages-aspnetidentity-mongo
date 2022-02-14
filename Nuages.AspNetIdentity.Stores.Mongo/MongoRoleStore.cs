@@ -1,4 +1,3 @@
-using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
@@ -75,8 +74,7 @@ public class MongoRoleStore<TRole, TKey> : NoSqlRoleStoreBase<TRole, TKey>,
 
         return ReturnDeleteResult(result);
     }
-
-
+    
     public async Task AddClaimAsync(TRole role, Claim claim, CancellationToken cancellationToken = new())
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -101,11 +99,6 @@ public class MongoRoleStore<TRole, TKey> : NoSqlRoleStoreBase<TRole, TKey>,
         if (entity != null)
             await RoleClaimsCollection.DeleteOneAsync(c => c.Id.Equals(entity.Id), DeleteOptions, cancellationToken);
     }
-
-    // private static TKey ConvertIdFromString(string id)
-    // {
-    //     return (TKey)TypeDescriptor.GetConverter(typeof(TKey)).ConvertFromInvariantString(id)!;
-    // }
 
     protected override TKey StringToKey(string id)
     {

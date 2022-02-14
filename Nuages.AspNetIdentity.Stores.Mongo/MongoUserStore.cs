@@ -150,7 +150,6 @@ public class MongoUserStore<TUser, TRole, TKey> : NoSqlUserStoreBase<TUser, TRol
 
         var list = claims.Select(claim => new MongoIdentityUserClaim<TKey>
         {
-            Id = Guid.NewGuid().ToString(),
             UserId = user.Id,
             Type = claim.Type,
             Value = claim.Value
@@ -172,7 +171,7 @@ public class MongoUserStore<TUser, TRole, TKey> : NoSqlUserStoreBase<TUser, TRol
             matchedClaim.Value = newClaim.Value;
             matchedClaim.Type = newClaim.Type;
 
-            await UsersClaimsCollection.ReplaceOneAsync(c => c.Id == matchedClaim.Id, matchedClaim, ReplaceOptions,
+            await UsersClaimsCollection.ReplaceOneAsync(c => c.Id.Equals( matchedClaim.Id), matchedClaim, ReplaceOptions,
                 cancellationToken);
         }
     }
@@ -207,7 +206,6 @@ public class MongoUserStore<TUser, TRole, TKey> : NoSqlUserStoreBase<TUser, TRol
 
         var login = new MongoIdentityUserLogin<TKey>
         {
-            Id = Guid.NewGuid().ToString(),
             UserId = user.Id,
             ProviderKey = loginInfo.ProviderKey,
             LoginProvider = loginInfo.LoginProvider,
@@ -246,7 +244,7 @@ public class MongoUserStore<TUser, TRole, TKey> : NoSqlUserStoreBase<TUser, TRol
 
     protected override async Task AddUserTokenAsync(MongoIdentityUserToken<TKey> token)
     {
-        token.Id = Guid.NewGuid().ToString();
+        //token.Id = KeyGenerator<TKey>.Generate();
         await UsersTokensCollection.InsertOneAsync(token);
     }
 
@@ -267,7 +265,6 @@ public class MongoUserStore<TUser, TRole, TKey> : NoSqlUserStoreBase<TUser, TRol
 
     protected override async Task AddUserRoleAsync(MongoIdentityUserRole<TKey> role)
     {
-        role.Id = Guid.NewGuid().ToString();
         await UsersRolesCollection.InsertOneAsync(role);
     }
 

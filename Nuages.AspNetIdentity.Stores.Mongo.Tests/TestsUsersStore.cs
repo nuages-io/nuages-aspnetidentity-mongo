@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using Xunit;
 
@@ -38,8 +39,9 @@ public class TestsUsersStore
 
         serviceCollection.AddSingleton<IConfiguration>(configuration);
 
-        var identityBuilder = new IdentityBuilder(typeof(IdentityUser<string>), typeof(IdentityRole<string>), serviceCollection);
-        identityBuilder.AddMongoStores<IdentityUser<string>, IdentityRole<string>, string>(configure =>
+        var identityBuilder = new IdentityBuilder(typeof(IdentityUser<ObjectId>), typeof(IdentityRole<ObjectId>), serviceCollection);
+        
+        identityBuilder.AddMongoStores<IdentityUser<ObjectId>, IdentityRole<ObjectId>, ObjectId>(configure =>
         {
             configure.ConnectionString = options.ConnectionString;
             configure.Database = options.Database;
@@ -52,14 +54,11 @@ public class TestsUsersStore
        
         Task.Run(async () =>
         {
-            var service = serviceProvider
-                    .GetRequiredService<IHostedService>() as
-                MongoSchemaInitializer<IdentityUser<string>, IdentityRole<string>, string>;
+            var service = serviceProvider.GetRequiredService<IHostedService>() as
+                MongoSchemaInitializer<IdentityUser<ObjectId>, IdentityRole<ObjectId>, ObjectId>;
 
             await service!.StartAsync(CancellationToken.None);
         });
-
-       
 
         _roleStore = new MongoRoleStore<IdentityRole<string>, string>(Options.Create(options));
         _userStore =

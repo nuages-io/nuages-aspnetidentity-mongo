@@ -8,10 +8,13 @@ namespace WebAspNetIdentityWithMongo.Pages;
 [IgnoreAntiforgeryToken]
 public class ErrorModel : PageModel
 {
+    // ReSharper disable once MemberCanBePrivate.Global
     public string? RequestId { get; set; }
 
+    // ReSharper disable once UnusedMember.Global
     public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
 
+    // ReSharper disable once NotAccessedField.Local
     private readonly ILogger<ErrorModel> _logger;
 
     public ErrorModel(ILogger<ErrorModel> logger)
@@ -19,6 +22,7 @@ public class ErrorModel : PageModel
         _logger = logger;
     }
 
+    // ReSharper disable once UnusedMember.Global
     public void OnGet()
     {
         RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;

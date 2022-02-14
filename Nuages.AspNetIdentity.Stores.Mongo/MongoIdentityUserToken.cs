@@ -4,5 +4,10 @@ namespace Nuages.AspNetIdentity.Stores.Mongo;
 
 public class MongoIdentityUserToken<TKey> : IdentityUserToken<TKey> where TKey : IEquatable<TKey>
 {
-    public string Id { get; set; } = "";
+    public MongoIdentityUserToken()
+    {
+        Id = KeyGenerator<TKey>.Generate();
+    }
+
+    public TKey Id { get; set; } 
 }
