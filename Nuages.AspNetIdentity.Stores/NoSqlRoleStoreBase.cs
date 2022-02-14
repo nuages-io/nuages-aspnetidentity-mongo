@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
@@ -26,12 +27,19 @@ public abstract class NoSqlRoleStoreBase<TRole, TKey> : IDisposable where TRole 
         if (_disposed) throw new ObjectDisposedException(GetType().Name);
     }
 
+    protected virtual TKey StringToKey(string id)
+    {
+        return (TKey)TypeDescriptor.GetConverter(typeof(TKey)).ConvertFromInvariantString(id)!;
+    }
+    
     public Task<TRole> FindByIdAsync(string roleId, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
         ThrowIfDisposed();
 
-        var role = Roles.SingleOrDefault(t => t.Id.Equals(roleId));
+        var key = StringToKey(roleId);
+        
+        var role = Roles.SingleOrDefault(t => t.Id.Equals(key));
 
         return Task.FromResult(role)!;
     }

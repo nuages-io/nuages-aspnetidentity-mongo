@@ -81,7 +81,7 @@ public abstract class NoSqlUserStoreBase<TUser, TRole, TKey, TUserLogin, TUserTo
         await UpdateAsync(user, cancellationToken);
     }
 
-    protected static TKey StringToKey(string id)
+    protected virtual TKey StringToKey(string id)
     {
         return (TKey)TypeDescriptor.GetConverter(typeof(TKey)).ConvertFromInvariantString(id)!;
     }
@@ -91,7 +91,9 @@ public abstract class NoSqlUserStoreBase<TUser, TRole, TKey, TUserLogin, TUserTo
         cancellationToken.ThrowIfCancellationRequested();
         ThrowIfDisposed();
 
-        return Task.FromResult(Users.SingleOrDefault(u => u.Id.Equals(userId)))!;
+        var key = StringToKey(userId);
+        
+        return Task.FromResult(Users.SingleOrDefault(u => u.Id.Equals(key)))!;
     }
 
     public Task<TUser> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)

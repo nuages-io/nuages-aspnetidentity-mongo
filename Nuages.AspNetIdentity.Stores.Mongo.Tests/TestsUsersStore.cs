@@ -71,7 +71,7 @@ public class TestsUsersStore
     {
         const string email = "user@example.com";
 
-        var user = new IdentityUser<string>
+        var user = new MongoIdentityUser<string>
         {
             Email = email,
             NormalizedEmail = email.ToUpper(),
@@ -89,7 +89,7 @@ public class TestsUsersStore
     // ReSharper disable once UnusedMethodReturnValue.Local
     private async Task<IdentityUser<string>> CreateDefaultUser2()
     {
-        var user = new IdentityUser<string>
+        var user = new MongoIdentityUser<string>
         {
             Email = "user2@example.com"
         };

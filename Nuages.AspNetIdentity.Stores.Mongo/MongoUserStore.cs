@@ -32,7 +32,7 @@ public class MongoUserStore<TUser, TRole, TKey> : NoSqlUserStoreBase<TUser, TRol
     IProtectedUserStore<TUser>
     where TUser : IdentityUser<TKey>
     where TRole : IdentityRole<TKey>
-    where TKey : IEquatable<TKey>
+    where TKey :  IEquatable<TKey>
 {
     private readonly IdentityErrorDescriber _errorDescriber = new();
     // ReSharper disable once CollectionNeverUpdated.Local
@@ -73,14 +73,20 @@ public class MongoUserStore<TUser, TRole, TKey> : NoSqlUserStoreBase<TUser, TRol
 
     public override IQueryable<TUser> Users => UsersCollection.AsQueryable();
 
+    protected override TKey StringToKey(string id)
+    {
+        if (typeof(TKey) == typeof(ObjectId))
+        {
+            return (TKey) (object) ObjectId.Parse(id) ;
+        }
+
+        return base.StringToKey(id);
+    }
+    
     public async Task<IdentityResult> CreateAsync(TUser user, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
         ThrowIfDisposed();
-
-                
-        if (user.Id == null || Equals(user.Id, default(TKey)))
-           user.Id = StringToKey(Guid.NewGuid().ToString());
 
         var email = await GetEmailAsync(user, cancellationToken);
         await SetNormalizedEmailAsync(user, email.ToUpper(), cancellationToken);

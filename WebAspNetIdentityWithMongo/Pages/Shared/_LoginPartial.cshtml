@@ -1,6 +1,8 @@
 @using Microsoft.AspNetCore.Identity
-@inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager
+@using Nuages.AspNetIdentity.Stores.Mongo
+@using MongoDB.Bson
+@inject SignInManager<MongoIdentityUser> SignInManager
+@inject UserManager<MongoIdentityUser> UserManager
 
 <ul class="navbar-nav">
     @if (SignInManager.IsSignedIn(User))

@@ -79,7 +79,7 @@ public class TestsRolesStore
     [Fact]
     public async Task ShouldDeleteWithSuccess()
     {
-        var role = new IdentityRole<string>
+        var role = new MongoIdentityRole<string>
         {
             Name = "Role",
             NormalizedName = "ROLE"
@@ -101,7 +101,7 @@ public class TestsRolesStore
     [Fact]
     public async Task ShouldFindByNameWithSuccess()
     {
-        var role = new IdentityRole<string>
+        var role = new MongoIdentityRole<string>
         {
             Name = "Role",
             NormalizedName = "ROLE"
@@ -128,7 +128,7 @@ public class TestsRolesStore
     [Fact]
     public async Task ShouldFAddCLaimsWithSuccess()
     {
-        var role = new IdentityRole<string>
+        var role = new MongoIdentityRole<string>
         {
             Name = "Role",
             NormalizedName = "ROLE"

@@ -48,9 +48,6 @@ public class MongoRoleStore<TRole, TKey> : NoSqlRoleStoreBase<TRole, TKey>,
         cancellationToken.ThrowIfCancellationRequested();
         ThrowIfDisposed();
 
-        if (role.Id == null || Equals(role.Id, default(TKey)))
-            role.Id = ConvertIdFromString(Guid.NewGuid().ToString());
-
         await SetNormalizedRoleNameAsync(role, role.Name.ToUpper(), cancellationToken);
 
         await RolesCollection.InsertOneAsync(role, null, cancellationToken);
@@ -105,12 +102,21 @@ public class MongoRoleStore<TRole, TKey> : NoSqlRoleStoreBase<TRole, TKey>,
             await RoleClaimsCollection.DeleteOneAsync(c => c.Id.Equals(entity.Id), DeleteOptions, cancellationToken);
     }
 
-    private static TKey ConvertIdFromString(string id)
+    // private static TKey ConvertIdFromString(string id)
+    // {
+    //     return (TKey)TypeDescriptor.GetConverter(typeof(TKey)).ConvertFromInvariantString(id)!;
+    // }
+
+    protected override TKey StringToKey(string id)
     {
-        return (TKey)TypeDescriptor.GetConverter(typeof(TKey)).ConvertFromInvariantString(id)!;
+        if (typeof(TKey) == typeof(ObjectId))
+        {
+            return (TKey) (object) ObjectId.Parse(id) ;
+        }
+
+        return base.StringToKey(id);
     }
-
-
+    
     [ExcludeFromCodeCoverage]
     private IdentityResult ReturnUpdateResult(ReplaceOneResult replaceOneResult)
     {

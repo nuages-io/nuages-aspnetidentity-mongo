@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using MongoDB.Bson;
 using Nuages.AspNetIdentity.Stores.Mongo;
 using WebAspNetIdentityWithMongo.Data;
 
@@ -16,13 +17,12 @@ var useMongo = true;
 
 if (useMongo)
 {
-    
     builder.Services.
-        AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-        .AddMongoStores<IdentityUser, IdentityRole, string>(config =>
+        AddDefaultIdentity<MongoIdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+        .AddMongoStores<MongoIdentityUser, MongoIdentityRole, ObjectId>(config =>
         {
-            // config.ConnectionString = "";
-            // config.Database = "";
+            config.ConnectionString = builder.Configuration["ConnectionString"];
+            config.Database =  builder.Configuration["Database"];
         });
 }
 else
