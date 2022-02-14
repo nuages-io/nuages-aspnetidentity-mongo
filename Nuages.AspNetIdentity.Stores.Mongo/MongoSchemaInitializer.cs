@@ -2,9 +2,11 @@ using System.Diagnostics.CodeAnalysis;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
+// ReSharper disable MemberCanBePrivate.Global
 
 namespace Nuages.AspNetIdentity.Stores.Mongo;
 
+// ReSharper disable once ClassNeverInstantiated.Global
 public class MongoSchemaInitializer<TUser, TRole, TKey> : IHostedService
     where TUser : IdentityUser<TKey>
     where TRole : IdentityRole<TKey>
@@ -31,15 +33,20 @@ public class MongoSchemaInitializer<TUser, TRole, TKey> : IHostedService
         _caseInsensitiveCollation = new Collation(options.Value.Locale, strength: CollationStrength.Primary);
     }
 
-    private IMongoCollection<TRole> RolesCollection { get; }
-    private IMongoCollection<TUser> UsersCollection { get; }
-    private IMongoCollection<IdentityUserRole<TKey>> UsersRolesCollection { get; }
-    private IMongoCollection<MongoIdentityUserToken<TKey>> UsersTokensCollection { get; }
-    private IMongoCollection<MongoIdentityUserLogin<TKey>> UsersLoginsCollection { get; }
-    private IMongoCollection<MongoIdentityUserClaim<TKey>> UsersClaimsCollection { get; }
-    private IMongoCollection<IdentityRoleClaim<TKey>> RolesClaimsCollection { get; }
+    protected IMongoCollection<TRole> RolesCollection { get; }
+    protected IMongoCollection<TUser> UsersCollection { get; }
+    protected IMongoCollection<IdentityUserRole<TKey>> UsersRolesCollection { get; }
+    protected IMongoCollection<MongoIdentityUserToken<TKey>> UsersTokensCollection { get; }
+    protected IMongoCollection<MongoIdentityUserLogin<TKey>> UsersLoginsCollection { get; }
+    protected IMongoCollection<MongoIdentityUserClaim<TKey>> UsersClaimsCollection { get; }
+    protected IMongoCollection<IdentityRoleClaim<TKey>> RolesClaimsCollection { get; }
 
     public async Task StartAsync(CancellationToken cancellationToken)
+    {
+        await Start();
+    }
+
+    protected virtual async Task Start()
     {
         await CreateRolesIndexes();
         await CreateUsersIndexes();
@@ -56,7 +63,7 @@ public class MongoSchemaInitializer<TUser, TRole, TKey> : IHostedService
         return Task.CompletedTask;
     }
 
-    private async Task CreateRolesClaimsIndexes()
+    protected virtual  async Task CreateRolesClaimsIndexes()
     {
         await RolesClaimsCollection.Indexes.CreateOneAsync(
             new CreateIndexModel<IdentityRoleClaim<TKey>>(
@@ -84,7 +91,7 @@ public class MongoSchemaInitializer<TUser, TRole, TKey> : IHostedService
         );
     }
 
-    private async Task CreateUsersClaimsIndexes()
+    protected virtual  async Task CreateUsersClaimsIndexes()
     {
         await UsersClaimsCollection.Indexes.CreateOneAsync(
             new CreateIndexModel<MongoIdentityUserClaim<TKey>>(
@@ -112,7 +119,7 @@ public class MongoSchemaInitializer<TUser, TRole, TKey> : IHostedService
         );
     }
 
-    private async Task CreateUsersLoginsIndexes()
+    protected virtual  async Task CreateUsersLoginsIndexes()
     {
         await UsersLoginsCollection.Indexes.CreateOneAsync(
             new CreateIndexModel<MongoIdentityUserLogin<TKey>>(
@@ -140,7 +147,7 @@ public class MongoSchemaInitializer<TUser, TRole, TKey> : IHostedService
         );
     }
 
-    private async Task CreateUsersTokensIndexes()
+    protected virtual  async Task CreateUsersTokensIndexes()
     {
         await UsersTokensCollection.Indexes.CreateOneAsync(
             new CreateIndexModel<MongoIdentityUserToken<TKey>>(
@@ -157,7 +164,7 @@ public class MongoSchemaInitializer<TUser, TRole, TKey> : IHostedService
         );
     }
 
-    private async Task CreateUsersRolesIndexes()
+    protected virtual  async Task CreateUsersRolesIndexes()
     {
         await UsersRolesCollection.Indexes.CreateOneAsync(
             new CreateIndexModel<IdentityUserRole<TKey>>(
@@ -194,7 +201,7 @@ public class MongoSchemaInitializer<TUser, TRole, TKey> : IHostedService
         );
     }
 
-    private async Task CreateRolesIndexes()
+    protected virtual  async Task CreateRolesIndexes()
     {
         await RolesCollection.Indexes.CreateOneAsync(
             new CreateIndexModel<TRole>(
@@ -221,7 +228,7 @@ public class MongoSchemaInitializer<TUser, TRole, TKey> : IHostedService
         );
     }
 
-    private async Task CreateUsersIndexes()
+    protected virtual  async Task CreateUsersIndexes()
     {
         await UsersCollection.Indexes.CreateOneAsync(
             new CreateIndexModel<TUser>(

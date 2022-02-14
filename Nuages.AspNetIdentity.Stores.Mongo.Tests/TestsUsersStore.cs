@@ -267,7 +267,7 @@ public class TestsUsersStore
     }
 
     [Fact]
-    public async Task ShouldAddCLaimWithSuccess()
+    public async Task ShouldAddClaimWithSuccess()
     {
         var user = await CreateDefaultUser();
         await CreateDefaultUser2();

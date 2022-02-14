@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using MongoDB.Bson;
 using Nuages.AspNetIdentity.Stores.Mongo;
 using WebAspNetIdentityWithMongo.Data;
 
@@ -14,17 +13,14 @@ builder.Host.ConfigureAppConfiguration((hostingContext, config) =>
         true);
 });
 
-// ReSharper disable once ConvertToConstant.Local
-var useMongo = true;
-
-if (useMongo)
+if (builder.Configuration.GetValue<bool>("UseMongo"))
 {
     builder.Services.
-        AddDefaultIdentity<MongoIdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-        .AddMongoStores<MongoIdentityUser, MongoIdentityRole, ObjectId>(config =>
+        AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+        .AddMongoStores(config =>
         {
-            config.ConnectionString = builder.Configuration["ConnectionString"];
-            config.Database =  builder.Configuration["Database"];
+            config.ConnectionString = builder.Configuration["Mongo:ConnectionString"];
+            config.Database =  builder.Configuration["Mongo:Database"];
         });
 }
 else

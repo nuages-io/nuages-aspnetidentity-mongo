@@ -4,6 +4,7 @@ using MongoDB.Bson;
 
 namespace Nuages.AspNetIdentity.Stores.Mongo;
 
+// ReSharper disable once UnusedType.Global
 public class MongoIdentityRole : MongoIdentityRole<ObjectId>
 {
     // ReSharper disable once MemberCanBePrivate.Global

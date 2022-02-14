@@ -128,7 +128,7 @@ public class TestsRolesStore
 
 
     [Fact]
-    public async Task ShouldFAddCLaimsWithSuccess()
+    public async Task ShouldAddClaimsWithSuccess()
     {
         var role = new MongoIdentityRole<string>
         {
