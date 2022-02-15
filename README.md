@@ -38,7 +38,7 @@ Modify your Program.cs code and add a call to AddMongoStores() to your IdentityB
 
 Add this line.
 
-```charp
+``csharp
  builder.Services.
     AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddMongoStores(); //Connection string and database in appsettings.json
@@ -48,7 +48,7 @@ That's it.
 
 You want an Id of type ObjectId? Use MongoIdentityUser.
 
-```charp
+```csharp
 
  builder.Services.
     AddDefaultIdentity<MongoIdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
@@ -69,7 +69,7 @@ public class MyIdentityUser: IdentityUser
 
 You will need to change the configuration a bit...
 
-```charp
+```csharp
  builder.Services.
     AddDefaultIdentity<MyIdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddMongoStores<MyIdentityUser>(); //Connection string and database in appsettings.json
