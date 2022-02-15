@@ -12,7 +12,7 @@ public static class AspNetIdentityMongoExtensions
         Action<MongoIdentityOptions> configure)
     {
         if (builder.UserType == typeof(MongoIdentityUser))
-            AddMongoStores<ObjectId>(builder, configure);
+            AddMongoStores<MongoIdentityUser, MongoIdentityRole, ObjectId>(builder, configure);
         else
         {
             AddMongoStores<IdentityUser, IdentityRole, string>(builder, configure);
