@@ -20,6 +20,7 @@ The library is design with the following requirements in mind.
 - We should be able to change index creations.
 - Minimal startup bootstrapping code
 - Default implementation (IdentityUser and descendants) should use string as Id
+- It should support all interface implemented by UserStore<> and RoleStore<>
 
 ### Restrictions:
 - No support for UserOnlyStore<>. So you will always have collection for roles created.
@@ -97,7 +98,7 @@ You will need to change the configuration a bit more...
 ```
 
 
-Hot wo customize index creation?
+## How to customize index creation?
 
 Indexes creation is done when the application start using  MongoSchemaInitializer<TUser, TRole, TKey> class.
 
