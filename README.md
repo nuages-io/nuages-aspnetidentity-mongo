@@ -1,4 +1,9 @@
-# ASP.Net Identity Stores for MongoDB  <img alt="Nuget" src="https://img.shields.io/nuget/v/Nuages.AspNetIdentity.Stores.Mongo?style=flat-square"> ![example workflow](https://github.com/nuages-io/nuages-aspnetidentity-mongo/actions/workflows/publish.yml/badge.svg)
+# ASP.Net Identity Stores for MongoDB  
+
+[![Nuages.AspNetIdentity.Stores.Mongo](https://img.shields.io/nuget/v/Nuages.AspNetIdentity.Stores.Mongo?style=flat-square&label=Nuages.AspNetIdentity.Stores.Mongo)](https://www.nuget.org/packages/Nuages.AspNetIdentity.Stores.Mongo/)
+
+[![example workflow](https://github.com/nuages-io/nuages-aspnetidentity-mongo/actions/workflows/publish.yml/badge.svg)](https://github.com/nuages-io/nuages-aspnetidentity-mongo/actions/workflows/publish.yml)
+
 
 Nuages.AspNetIdentity.Store.Mongo provide support for MongoDB as a storage mechanism for ASP.NET Core Identity.
 
