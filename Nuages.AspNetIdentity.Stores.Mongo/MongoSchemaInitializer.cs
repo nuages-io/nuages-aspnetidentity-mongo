@@ -23,7 +23,7 @@ public class MongoSchemaInitializer<TUser, TRole, TKey> : IHostedService
         var database = client.GetDatabase(options.Value.Database);
 
         RolesCollection = database.GetCollection<TRole>("AspNetRoles");
-        RolesClaimsCollection = database.GetCollection<IdentityRoleClaim<TKey>>("AspNetRoleClaims");
+        RolesClaimsCollection = database.GetCollection<MongoIdentityRoleClaim<TKey>>("AspNetRoleClaims");
         UsersCollection = database.GetCollection<TUser>("AspNetUsers");
         UsersClaimsCollection = database.GetCollection<MongoIdentityUserClaim<TKey>>("AspNetUserClaims");
         UsersLoginsCollection = database.GetCollection<MongoIdentityUserLogin<TKey>>("AspNetUserLogins");
@@ -39,7 +39,7 @@ public class MongoSchemaInitializer<TUser, TRole, TKey> : IHostedService
     protected IMongoCollection<MongoIdentityUserToken<TKey>> UsersTokensCollection { get; }
     protected IMongoCollection<MongoIdentityUserLogin<TKey>> UsersLoginsCollection { get; }
     protected IMongoCollection<MongoIdentityUserClaim<TKey>> UsersClaimsCollection { get; }
-    protected IMongoCollection<IdentityRoleClaim<TKey>> RolesClaimsCollection { get; }
+    protected IMongoCollection<MongoIdentityRoleClaim<TKey>> RolesClaimsCollection { get; }
 
     public async Task StartAsync(CancellationToken cancellationToken)
     {
@@ -66,8 +66,8 @@ public class MongoSchemaInitializer<TUser, TRole, TKey> : IHostedService
     protected virtual  async Task CreateRolesClaimsIndexes()
     {
         await RolesClaimsCollection.Indexes.CreateOneAsync(
-            new CreateIndexModel<IdentityRoleClaim<TKey>>(
-                Builders<IdentityRoleClaim<TKey>>.IndexKeys
+            new CreateIndexModel<MongoIdentityRoleClaim<TKey>>(
+                Builders<MongoIdentityRoleClaim<TKey>>.IndexKeys
                     .Ascending(p => p.RoleId)
                 , new CreateIndexOptions
                 {
@@ -77,11 +77,11 @@ public class MongoSchemaInitializer<TUser, TRole, TKey> : IHostedService
         );
 
         await RolesClaimsCollection.Indexes.CreateOneAsync(
-            new CreateIndexModel<IdentityRoleClaim<TKey>>(
-                Builders<IdentityRoleClaim<TKey>>.IndexKeys
+            new CreateIndexModel<MongoIdentityRoleClaim<TKey>>(
+                Builders<MongoIdentityRoleClaim<TKey>>.IndexKeys
                     .Ascending(p => p.RoleId)
-                    .Ascending(p => p.ClaimType)
-                    .Ascending(p => p.ClaimValue)
+                    .Ascending(p => p.Type)
+                    .Ascending(p => p.Value)
                 , new CreateIndexOptions
                 {
                     Name = "UX_RolesClaims_RoleIdClaimTypeClaimValue",

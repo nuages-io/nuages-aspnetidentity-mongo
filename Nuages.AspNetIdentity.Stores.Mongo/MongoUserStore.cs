@@ -136,10 +136,12 @@ public class MongoUserStore<TUser, TRole, TKey> : NoSqlUserStoreBase<TUser, TRol
         cancellationToken.ThrowIfCancellationRequested();
         ThrowIfDisposed();
 
-        var list = UsersClaims.Where(c => c.UserId.Equals(user.Id)).ToList().Select(c =>
-            new Claim(c.Type, c.Value)
+        var query = UsersClaims.Where(c => c.UserId.Equals(user.Id)).Select(c =>
+            new { c.Type , c.Value}
         ).ToList();
 
+        var list = query.Select(c => new Claim(c.Type, c.Value));
+        
         return Task.FromResult((IList<Claim>)list);
     }
 
