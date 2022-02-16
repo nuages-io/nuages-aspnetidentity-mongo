@@ -10,7 +10,7 @@ public abstract class NoSqlRoleStoreBase<TRole, TKey> : IDisposable where TRole 
 {
     private bool _disposed;
     public abstract IQueryable<TRole> Roles { get; }
-    protected abstract IQueryable<IdentityRoleClaim<TKey>> RolesClaims { get; }
+   
 
     [ExcludeFromCodeCoverage]
     public void Dispose()
@@ -79,14 +79,7 @@ public abstract class NoSqlRoleStoreBase<TRole, TKey> : IDisposable where TRole 
         return Task.FromResult(role.NormalizedName);
     }
 
-    public Task<IList<Claim>> GetClaimsAsync(TRole role, CancellationToken cancellationToken = new())
-    {
-        var list = RolesClaims.Where(c => c.RoleId.Equals(role.Id)).Select(c =>
-            new Claim(c.ClaimType, c.ClaimValue)
-        ).ToList();
-
-        return Task.FromResult((IList<Claim>)list);
-    }
+    public abstract Task<IList<Claim>> GetClaimsAsync(TRole role, CancellationToken cancellationToken = new());
 
     public async Task SetNormalizedRoleNameAsync(TRole role, string normalizedName, CancellationToken cancellationToken)
     {

@@ -25,7 +25,7 @@ public class MongoRoleStore<TRole, TKey> : NoSqlRoleStoreBase<TRole, TKey>,
         var database = client.GetDatabase(options.Value.Database);
 
         RolesCollection = database.GetCollection<TRole>("AspNetRoles");
-        RoleClaimsCollection = database.GetCollection<IdentityRoleClaim<TKey>>("AspNetRoleClaims");
+        RoleClaimsCollection = database.GetCollection<MongoIdentityRoleClaim<TKey>>("AspNetRoleClaims");
     }
 
     // ReSharper disable once FieldCanBeMadeReadOnly.Global
@@ -37,8 +37,8 @@ public class MongoRoleStore<TRole, TKey> : NoSqlRoleStoreBase<TRole, TKey>,
     public static DeleteOptions DeleteOptions { get; } = new();
 
     private IMongoCollection<TRole> RolesCollection { get; }
-    private IMongoCollection<IdentityRoleClaim<TKey>> RoleClaimsCollection { get; }
-    protected override IQueryable<IdentityRoleClaim<TKey>> RolesClaims => RoleClaimsCollection.AsQueryable();
+    private IMongoCollection<MongoIdentityRoleClaim<TKey>> RoleClaimsCollection { get; }
+    protected IQueryable<MongoIdentityRoleClaim<TKey>> RolesClaims => RoleClaimsCollection.AsQueryable();
 
     public override IQueryable<TRole> Roles => RolesCollection.AsQueryable();
 
@@ -80,14 +80,23 @@ public class MongoRoleStore<TRole, TKey> : NoSqlRoleStoreBase<TRole, TKey>,
         cancellationToken.ThrowIfCancellationRequested();
         ThrowIfDisposed();
 
-        await RoleClaimsCollection.InsertOneAsync(new IdentityRoleClaim<TKey>
+        await RoleClaimsCollection.InsertOneAsync(new MongoIdentityRoleClaim<TKey>
         {
             RoleId = role.Id,
-            ClaimType = claim.Type,
-            ClaimValue = claim.Value
+            Type = claim.Type,
+            Value = claim.Value
         }, null, cancellationToken);
     }
 
+    public override Task<IList<Claim>> GetClaimsAsync(TRole role, CancellationToken cancellationToken = new())
+    {
+        var list = RolesClaims.Where(c => c.RoleId.Equals(role.Id)).Select(c =>
+            new Claim(c.Type, c.Value)
+        ).ToList();
+
+        return Task.FromResult((IList<Claim>)list);
+    }
+    
     public async Task RemoveClaimAsync(TRole role, Claim claim, CancellationToken cancellationToken = new())
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -95,7 +104,7 @@ public class MongoRoleStore<TRole, TKey> : NoSqlRoleStoreBase<TRole, TKey>,
 
         var entity =
             RoleClaimsCollection.AsQueryable().FirstOrDefault(
-                uc => uc.RoleId.Equals(role.Id) && uc.ClaimType == claim.Type && uc.ClaimValue == claim.Value);
+                uc => uc.RoleId.Equals(role.Id) && uc.Type == claim.Type && uc.Value == claim.Value);
         if (entity != null)
             await RoleClaimsCollection.DeleteOneAsync(c => c.Id.Equals(entity.Id), DeleteOptions, cancellationToken);
     }
