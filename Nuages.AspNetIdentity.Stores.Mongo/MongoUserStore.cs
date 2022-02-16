@@ -140,7 +140,7 @@ public class MongoUserStore<TUser, TRole, TKey> : NoSqlUserStoreBase<TUser, TRol
             new { c.Type , c.Value}
         ).ToList();
 
-        var list = query.Select(c => new Claim(c.Type, c.Value));
+        var list = query.Select(c => new Claim(c.Type, c.Value)).ToList();
         
         return Task.FromResult((IList<Claim>)list);
     }
