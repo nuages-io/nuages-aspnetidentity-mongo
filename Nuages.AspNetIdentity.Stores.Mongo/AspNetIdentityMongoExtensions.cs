@@ -8,36 +8,36 @@ namespace Nuages.AspNetIdentity.Stores.Mongo;
 
 public static class AspNetIdentityMongoExtensions
 {
-    public static void AddMongoStores(this IdentityBuilder builder,
+    public static IdentityBuilder AddMongoStores(this IdentityBuilder builder,
         Action<MongoIdentityOptions> configure)
     {
         if (builder.UserType == typeof(MongoIdentityUser))
-            AddMongoStores<MongoIdentityUser, MongoIdentityRole, ObjectId>(builder, configure);
+            return AddMongoStores<MongoIdentityUser, MongoIdentityRole, ObjectId>(builder, configure);
         else
         {
-            AddMongoStores<IdentityUser, IdentityRole, string>(builder, configure);
+            return AddMongoStores<IdentityUser, IdentityRole, string>(builder, configure);
         }
     }
 
-    public static void AddMongoStores<TKey>(this IdentityBuilder builder,
+    public static IdentityBuilder AddMongoStores<TKey>(this IdentityBuilder builder,
         Action<MongoIdentityOptions> configure)
         where TKey : IEquatable<TKey>
     {
-        AddMongoStores<MongoIdentityUser<TKey>, MongoIdentityRole<TKey>, TKey, MongoSchemaInitializer<
+        return AddMongoStores<MongoIdentityUser<TKey>, MongoIdentityRole<TKey>, TKey, MongoSchemaInitializer<
             MongoIdentityUser<TKey>,
             MongoIdentityRole<TKey>, TKey>>(builder, configure);
     }
 
-    public static void AddMongoStores<TUser, TRole, TKey>(this IdentityBuilder builder,
+    public static IdentityBuilder AddMongoStores<TUser, TRole, TKey>(this IdentityBuilder builder,
         Action<MongoIdentityOptions> configure)
         where TUser : IdentityUser<TKey>
         where TRole : IdentityRole<TKey>
         where TKey : IEquatable<TKey>
     {
-        AddMongoStores<TUser, TRole, TKey, MongoSchemaInitializer<TUser, TRole, TKey>>(builder, configure);
+        return AddMongoStores<TUser, TRole, TKey, MongoSchemaInitializer<TUser, TRole, TKey>>(builder, configure);
     }
 
-    public static void AddMongoStores<TUser, TRole, TKey, TInitializer>(this IdentityBuilder builder,
+    public static IdentityBuilder AddMongoStores<TUser, TRole, TKey, TInitializer>(this IdentityBuilder builder,
         Action<MongoIdentityOptions> configure)
         where TUser : IdentityUser<TKey>
         where TRole : IdentityRole<TKey>
@@ -59,6 +59,8 @@ public static class AspNetIdentityMongoExtensions
         AddStores(builder.Services, typeof(TUser), typeof(TRole));
 
         builder.Services.AddHostedService<TInitializer>();
+
+        return builder;
     }
 
     private static void AddStores(IServiceCollection services, Type userType, Type roleType)
