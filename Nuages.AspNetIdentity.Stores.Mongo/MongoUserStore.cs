@@ -278,8 +278,10 @@ public class MongoUserStore<TUser, TRole, TKey> : NoSqlUserStoreBase<TUser, TRol
     [ExcludeFromCodeCoverage]
     private IdentityResult ReturnUpdateResult(ReplaceOneResult result)
     {
-        if (!result.IsAcknowledged && result.ModifiedCount == 0)
+        if (!result.IsAcknowledged || result.ModifiedCount == 0)
+        {
             return IdentityResult.Failed(_errorDescriber.ConcurrencyFailure());
+        }
 
         return IdentityResult.Success;
     }
