@@ -40,7 +40,9 @@ public class MongoUserStore<TUser, TRole, TKey> : NoSqlUserStoreBase<TUser, TRol
     public MongoUserStore(IOptions<MongoIdentityOptions> options)
     {
         var client = new MongoClient(options.Value.ConnectionString);
-        var database = client.GetDatabase(options.Value.Database);
+        
+        var url = new MongoUrl(options.Value.ConnectionString);
+        var database = client.GetDatabase(url.DatabaseName);
 
         UsersCollection = database.GetCollection<TUser>("AspNetUsers");
         RolesCollection = database.GetCollection<TRole>("AspNetRoles");

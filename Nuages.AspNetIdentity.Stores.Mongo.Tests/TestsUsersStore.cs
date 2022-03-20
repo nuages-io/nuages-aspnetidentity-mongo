@@ -31,7 +31,6 @@ public class TestsUsersStore
         var options = new MongoIdentityOptions
         {
             ConnectionString = configuration["ConnectionString"],
-            Database = configuration["Database"],
             Locale = "en"
         };
         
@@ -44,11 +43,12 @@ public class TestsUsersStore
         identityBuilder.AddMongoStores<IdentityUser<ObjectId>, IdentityRole<ObjectId>, ObjectId>(configure =>
         {
             configure.ConnectionString = options.ConnectionString;
-            configure.Database = options.Database;
         });
         
         var client = new MongoClient(options.ConnectionString);
-        client.DropDatabase(options.Database);
+
+        var url = new MongoUrl(options.ConnectionString);
+        client.DropDatabase(url.DatabaseName);
         
         var serviceProvider = serviceCollection.BuildServiceProvider();
        

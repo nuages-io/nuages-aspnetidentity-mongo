@@ -20,7 +20,6 @@ if (builder.Configuration.GetValue<bool>("UseMongo"))
         .AddMongoStores(config =>
         {
             config.ConnectionString = builder.Configuration["Mongo:ConnectionString"];
-            config.Database =  builder.Configuration["Mongo:Database"];
         });
 }
 else

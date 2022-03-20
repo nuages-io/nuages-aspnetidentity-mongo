@@ -22,7 +22,9 @@ public class MongoRoleStore<TRole, TKey> : NoSqlRoleStoreBase<TRole, TKey>,
     public MongoRoleStore(IOptions<MongoIdentityOptions> options)
     {
         var client = new MongoClient(options.Value.ConnectionString);
-        var database = client.GetDatabase(options.Value.Database);
+
+        var url = new MongoUrl(options.Value.ConnectionString);
+        var database = client.GetDatabase(url.DatabaseName);
 
         RolesCollection = database.GetCollection<TRole>("AspNetRoles");
         RoleClaimsCollection = database.GetCollection<MongoIdentityRoleClaim<TKey>>("AspNetRoleClaims");

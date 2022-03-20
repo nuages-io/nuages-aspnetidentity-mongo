@@ -20,7 +20,8 @@ public class MongoSchemaInitializer<TUser, TRole, TKey> : IHostedService
         _identityOptions = identityOptions.Value;
 
         var client = new MongoClient(options.Value.ConnectionString);
-        var database = client.GetDatabase(options.Value.Database);
+        var url = new MongoUrl(options.Value.ConnectionString);
+        var database = client.GetDatabase(url.DatabaseName);
 
         RolesCollection = database.GetCollection<TRole>("AspNetRoles");
         RolesClaimsCollection = database.GetCollection<MongoIdentityRoleClaim<TKey>>("AspNetRoleClaims");
