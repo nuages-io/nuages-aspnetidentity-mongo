@@ -34,8 +34,8 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore -c RELEASE
-    - name: Test
-      run: dotnet test Nuages.AspNetIdentity.Stores.Mongo.Tests/Nuages.AspNetIdentity.Stores.Mongo.Tests.csproj -c RELEASE
+    # - name: Test
+    #  run: dotnet test Nuages.AspNetIdentity.Stores.Mongo.Tests/Nuages.AspNetIdentity.Stores.Mongo.Tests.csproj -c RELEASE
     - name: Pack
       run: |
         dotnet pack Nuages.AspNetIdentity.Stores/Nuages.AspNetIdentity.Stores.csproj --output ./nupkgs -p:PackageVersion=${VERSION} -c RELEASE
