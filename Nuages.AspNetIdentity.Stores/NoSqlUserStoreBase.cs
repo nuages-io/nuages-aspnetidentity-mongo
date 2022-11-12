@@ -51,7 +51,7 @@ public abstract class NoSqlUserStoreBase<TUser, TRole, TKey, TUserLogin, TUserTo
         cancellationToken.ThrowIfCancellationRequested();
         ThrowIfDisposed();
 
-        return user != null ? Task.FromResult(user.UserName) : throw new ArgumentNullException(nameof(user));
+        return (user != null ? Task.FromResult(user.UserName) : throw new ArgumentNullException(nameof(user)))!;
     }
 
     public async Task SetUserNameAsync(TUser user, string userName, CancellationToken cancellationToken)
@@ -71,7 +71,7 @@ public abstract class NoSqlUserStoreBase<TUser, TRole, TKey, TUserLogin, TUserTo
         cancellationToken.ThrowIfCancellationRequested();
         ThrowIfDisposed();
 
-        return user != null ? Task.FromResult(user.NormalizedUserName) : throw new ArgumentNullException(nameof(user));
+        return (user != null ? Task.FromResult(user.NormalizedUserName) : throw new ArgumentNullException(nameof(user)))!;
     }
 
     public async Task SetNormalizedUserNameAsync(TUser user, string normalizedName, CancellationToken cancellationToken)
@@ -103,9 +103,9 @@ public abstract class NoSqlUserStoreBase<TUser, TRole, TKey, TUserLogin, TUserTo
 
         // ReSharper disable once SpecifyStringComparison
         return Task.FromResult(
-            Users.FirstOrDefault(x => x.NormalizedUserName.ToUpper() == normalizedUserName.ToUpper()))!;
+            Users.FirstOrDefault(x => !string.IsNullOrEmpty(x.NormalizedUserName) && x.NormalizedUserName.ToUpper() == normalizedUserName.ToUpper()))!;
     }
-
+    
     public Task<IList<UserLoginInfo>> GetLoginsAsync(TUser user, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -178,7 +178,7 @@ public abstract class NoSqlUserStoreBase<TUser, TRole, TKey, TUserLogin, TUserTo
 
         await UpdateAsync(user, cancellationToken);
     }
-
+#if NET6_0
     public Task<string> GetPasswordHashAsync(TUser user, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -186,6 +186,16 @@ public abstract class NoSqlUserStoreBase<TUser, TRole, TKey, TUserLogin, TUserTo
 
         return Task.FromResult(user.PasswordHash);
     }
+#endif
+#if NET7_0
+    public Task<string?> GetPasswordHashAsync(TUser user, CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        ThrowIfDisposed();
+
+        return Task.FromResult(user.PasswordHash);
+    }
+#endif 
 
     public Task<bool> HasPasswordAsync(TUser user, CancellationToken cancellationToken)
     {
@@ -292,6 +302,7 @@ public abstract class NoSqlUserStoreBase<TUser, TRole, TKey, TUserLogin, TUserTo
         await UpdateAsync(user, cancellationToken);
     }
 
+    #if NET6_0
     public Task<string> GetEmailAsync(TUser user, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -299,6 +310,16 @@ public abstract class NoSqlUserStoreBase<TUser, TRole, TKey, TUserLogin, TUserTo
 
         return Task.FromResult(user.Email);
     }
+    #endif
+#if NET7_0
+    public Task<string?> GetEmailAsync(TUser user, CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        ThrowIfDisposed();
+
+        return Task.FromResult(user.Email);
+    }
+#endif
 
     public Task<bool> GetEmailConfirmedAsync(TUser user, CancellationToken cancellationToken)
     {
@@ -325,16 +346,28 @@ public abstract class NoSqlUserStoreBase<TUser, TRole, TKey, TUserLogin, TUserTo
 
         // ReSharper disable once SpecifyStringComparison
         return Task.FromResult(Users.AsQueryable()
-            .FirstOrDefault(x => x.NormalizedEmail.ToUpper() == normalizedEmail.ToUpper()))!;
+            .FirstOrDefault(x => !string.IsNullOrEmpty(x.NormalizedEmail) &&  x.NormalizedEmail.ToUpper() == normalizedEmail.ToUpper()))!;
     }
 
-    public Task<string> GetNormalizedEmailAsync(TUser user, CancellationToken cancellationToken)
+    #if NET6_0
+     public Task<string> GetNormalizedEmailAsync(TUser user, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
         ThrowIfDisposed();
 
         return Task.FromResult(user.NormalizedEmail);
     }
+    #endif
+#if NET7_0
+     public Task<string?> GetNormalizedEmailAsync(TUser user, CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        ThrowIfDisposed();
+
+        return Task.FromResult(user.NormalizedEmail);
+    }
+#endif
+   
 
     public async Task SetNormalizedEmailAsync(TUser user, string normalizedEmail, CancellationToken cancellationToken)
     {
@@ -353,14 +386,14 @@ public abstract class NoSqlUserStoreBase<TUser, TRole, TKey, TUserLogin, TUserTo
         await UpdateAsync(user, cancellationToken);
     }
 
-    public Task<string> GetPhoneNumberAsync(TUser user, CancellationToken cancellationToken)
+     public Task<string> GetPhoneNumberAsync(TUser user, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
         ThrowIfDisposed();
 
-        return Task.FromResult(user.PhoneNumber);
+        return Task.FromResult(user.PhoneNumber!);
     }
-
+   
     public Task<bool> GetPhoneNumberConfirmedAsync(TUser user, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();

@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <OutputType>Library</OutputType>
@@ -32,7 +32,7 @@
     </ItemGroup>
     
     <ItemGroup>
-        <PackageReference Include="MongoDB.Driver" Version="2.15.0" />
+        <PackageReference Include="MongoDB.Driver" Version="2.18.0" />
     </ItemGroup>
 
     <ItemGroup>

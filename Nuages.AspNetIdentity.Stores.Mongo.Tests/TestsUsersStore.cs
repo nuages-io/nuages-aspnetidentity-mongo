@@ -12,6 +12,8 @@ using Xunit;
 
 namespace Nuages.AspNetIdentity.Stores.Mongo.Tests;
 
+#nullable disable
+
 [Collection("Mongo")]
 public class TestsUsersStore
 {

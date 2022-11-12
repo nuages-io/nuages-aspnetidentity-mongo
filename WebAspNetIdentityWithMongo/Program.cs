@@ -5,10 +5,11 @@ using WebAspNetIdentityWithMongo.Data;
 
 
 var builder = WebApplication.CreateBuilder(args);
+
 // ReSharper disable once UnusedParameter.Local
 builder.Host.ConfigureAppConfiguration((hostingContext, config) =>
 {
-    config.AddJsonFile("appsettings.local.json",
+    builder.Configuration.AddJsonFile("appsettings.local.json",
         false,
         true);
 });
@@ -19,7 +20,7 @@ if (builder.Configuration.GetValue<bool>("UseMongo"))
         AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
         .AddMongoStores(config =>
         {
-            config.ConnectionString = builder.Configuration["Mongo:ConnectionString"];
+            config.ConnectionString = builder.Configuration["Mongo:ConnectionString"]!;
         });
 }
 else

@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Nuages.AspNetIdentity.Stores;
 
+#nullable disable
+
 public abstract class NoSqlRoleStoreBase<TRole, TKey> : IDisposable where TRole : IdentityRole<TKey>
     where TKey : IEquatable<TKey>
 {
@@ -50,18 +52,19 @@ public abstract class NoSqlRoleStoreBase<TRole, TKey> : IDisposable where TRole 
         ThrowIfDisposed();
 
         // ReSharper disable once SpecifyStringComparison
-        var role = Roles.SingleOrDefault(t => t.NormalizedName.ToUpper() == normalizedRoleName.ToUpper());
+        var role = Roles.SingleOrDefault(t => t.NormalizedName!.ToUpper() == normalizedRoleName.ToUpper());
 
         return Task.FromResult(role)!;
     }
 
-    public Task<string?> GetRoleIdAsync(TRole role, CancellationToken cancellationToken)
+    public Task<string> GetRoleIdAsync(TRole role, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
         ThrowIfDisposed();
 
-        return Task.FromResult(role.Id.ToString());
+        return Task.FromResult(role.Id.ToString()!);
     }
+
 
     public Task<string> GetRoleNameAsync(TRole role, CancellationToken cancellationToken)
     {
@@ -70,7 +73,6 @@ public abstract class NoSqlRoleStoreBase<TRole, TKey> : IDisposable where TRole 
 
         return Task.FromResult(role.Name);
     }
-
     public Task<string> GetNormalizedRoleNameAsync(TRole role, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -78,6 +80,7 @@ public abstract class NoSqlRoleStoreBase<TRole, TKey> : IDisposable where TRole 
 
         return Task.FromResult(role.NormalizedName);
     }
+    
 
     public abstract Task<IList<Claim>> GetClaimsAsync(TRole role, CancellationToken cancellationToken = new());
 

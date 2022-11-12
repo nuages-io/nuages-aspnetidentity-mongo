@@ -12,6 +12,8 @@ namespace Nuages.AspNetIdentity.Stores.Mongo.Tests;
 
 [Collection("Mongo")]
 
+#nullable disable
+
 public class TestsRolesStore
 {
     private readonly MongoRoleStore<IdentityRole<string>, string> _roleStore;

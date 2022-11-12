@@ -9,6 +9,7 @@ using MongoDB.Driver;
 
 namespace Nuages.AspNetIdentity.Stores.Mongo;
 
+#nullable disable
 // ReSharper disable once ClassNeverInstantiated.Global
 // ReSharper disable once UnusedType.Global
 public class MongoRoleStore<TRole, TKey> : NoSqlRoleStoreBase<TRole, TKey>,

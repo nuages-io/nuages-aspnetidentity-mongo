@@ -10,6 +10,8 @@ using MongoDB.Driver;
 // ReSharper disable InconsistentNaming
 // ReSharper disable ConvertIfStatementToReturnStatement
 
+#nullable disable
+
 namespace Nuages.AspNetIdentity.Stores.Mongo;
 
 // ReSharper disable once ClassNeverInstantiated.Global
@@ -237,7 +239,7 @@ public class MongoUserStore<TUser, TRole, TKey> : NoSqlUserStoreBase<TUser, TRol
         return Task.FromResult(user.SecurityStamp);
     }
 
-    protected override Task<TRole?> FindRoleByNameAsync(string normalizedName, CancellationToken cancellationToken)
+    protected override Task<TRole> FindRoleByNameAsync(string normalizedName, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
         ThrowIfDisposed();
