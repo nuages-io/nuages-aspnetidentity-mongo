@@ -28,7 +28,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Remove="appsettings.local.json" />
         <Content Include="appsettings.local.json" CopyToOutputDirectory="Always" Condition="Exists('appsettings.local.json')" />
     </ItemGroup>
 </Project>
